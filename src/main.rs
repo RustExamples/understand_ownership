@@ -1,9 +1,20 @@
 fn main() {
-    let s1 = String::from("vms"); // "s1" comes into scope
+    let mut s = String::from("Hello World"); // "s" comes into scope
 
-    let r1 = &s1; // "r1" `borrow` "s1"
+    let first_word = get_first_word(&s); // get index of first word
 
-    let s2 = s1; // compile errorr
-    			 // "s1" can't `move` into "s2" because it is borrowed
-                 // by "r1"
+    s.clear(); // "first_word" & "s" are out of sync
+               // "first_word" holds 5 but "s" is empty here
+}
+
+fn get_first_word(s: &String) -> usize {
+    let bytes = s.as_bytes(); // conver to byte array
+
+    for (i, &item) in bytes.iter().enumerate() { // enumerate returns (int, reference)
+        if item == b' ' {
+            return i // return if space found
+        }
+    }
+
+    s.len() // return length of string if no space found
 }
