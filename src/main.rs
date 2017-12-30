@@ -1,21 +1,21 @@
-fn main() { // "s" & "x" invalid here
-    let s = String::from("hello"); // "s" comes into scope and stored on heap
+fn main() { // "s1", "s2" & "s3" invalid here
+    let s1 = gets_ownership(); // "s1" gets ownership from function
+    let s2 = String::from("hello"); // "s2" comes into scope and stored on heap
+    let s3 = gives_and_takes_back_ownership(s2); // "s2" `move` to function and invalidated
+                                                 // "s3" gets ownership from function
 
-    takes_ownership(s); // "s" `move` into function and is invalidated
+    println!("s1 is {}", s1); // "s1" is valid here
+    // println!("s2 is {}", s2); // Throws compile time error
+    println!("s3 is {}", s3); // "s3" is valid here
 
-    // println("s is {}", s); // Throws compile time error
+} // "s1" & "s2" goes out of scope and `drop` called
 
-    let x = 5; // "x" comes into scope
+fn gets_ownership() -> String { // "s" is invalid here
+    let s = String::from("hello");
 
-    makes_copy(x); // "x" copied to function
+    s // "s" `move` to calling function
+}
 
-    println!("x is {}", x); // "x" still valid here
-} // "x" goes out of scope and no `drop` called
-
-fn takes_ownership(s: String) { // "s" comes into scope and takes ownership
-    println!("s is {}", s); // "s" valid here
-} // "s" goes out of scope and `drop` is called
-
-fn makes_copy(x: i32) { // "x" comes into scope
-    println!("x is {}", x); // "x" valid here
-} // "x" goes out of scope and no `drop` called
+fn gives_and_takes_back_ownership(s: String) -> String { // "s" comes into scope and takes ownership
+    s // "s" `move` to calling function
+}
