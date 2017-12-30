@@ -1,20 +1,28 @@
 fn main() {
-    let mut s = String::from("Hello World"); // "s" comes into scope
+    let mut s = String::from("hello world");
+    // let s1 = &s[0..5];
+    // let s2 = &s[6..11];
+    // let s3 = &s[0..]; // end index is length
+    // let s4 = &s[..5]; // start index is 0
+    // let s5 = &s[..]; // take whole string
 
-    let first_word = get_first_word(&s); // get index of first word
+    let word = first_word(&s); // Pass "immutable" reference of "s"
+    						   // Get "immutable" slice of "s"
 
-    s.clear(); // "first_word" & "s" are out of sync
-               // "first_word" holds 5 but "s" is empty here
+    s.clear(); // Compile time error
+    		   // "s.clear()" tries to get a "mutable" reference of "s"
+               // we can't have "mutable" and "immutable" reference
+               // to same data in same scope
 }
 
-fn get_first_word(s: &String) -> usize {
-    let bytes = s.as_bytes(); // conver to byte array
+fn first_word(s: &String) -> &str { // Return "immutable" slice
+    let bytes = s.as_bytes(); // Return "immutable" reference
 
-    for (i, &item) in bytes.iter().enumerate() { // enumerate returns (int, reference)
-        if item == b' ' {
-            return i // return if space found
+    for (i, &byte) in bytes.iter().enumerate() { // Return (integer, reference)
+        if byte == b' ' {
+            return &s[..i] // Return "immutable" slice
         }
     }
 
-    s.len() // return length of string if no space found
+    &s[..] // Return "immutable" slice
 }
