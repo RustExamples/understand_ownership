@@ -1,20 +1,30 @@
 fn main() {
-    let s1 = String::from("hello");
+    let mut s1 = String::from("hello"); // make "s1" mutable
 
-    let length = calculate_length(&s1); // &s1 creates a reference
-                                        // reference `immutable` like variables
+    change(&mut s1); // create "mutable" reference of "s1"
 
-    println!("Length of {} is {}", s1, length); // "s1" valid here
+    println!("s1 is {}", s1);
 
-    change(&s1);
+    // compile time error 
+    // atmost one mutable reference to "s1" possible
+    // let r1 = &mut s1;
+    // let r2 = &mut s1;
+
+    {
+        let r1 = &mut s1;
+    } // "r1" goes out of scope and returns what it borrowed
+
+    let r2 = &mut s1; // valid usage here
+
+    // compile time error 
+    // mutiple immutable references possible
+    let r1 = &s1;
+    let r2 = &s1;
+    // mixing mutable and immutable references in same scope
+    let r3 = &mut s1;
+
 } // "s1" goes out of scope and is dropped
 
-fn calculate_length(s: &String) -> usize { // "s" reference to String
-                                           // "s" `borrow` from "s1"
-                                           // "s" doesn't own
-    s.len()
-} // "s" goes out of scope and nothing is dropped
-
-fn change(s: &String) { 
-    // s.push_str(", world"); // Compile time error trying to modify immutable reference
+fn change(s: &mut String) {  // accept a "mutable" reference
+     s.push_str(", world"); 
 }
