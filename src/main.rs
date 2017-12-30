@@ -1,11 +1,9 @@
 fn main() {
-	let s = get_string();
+    let s1 = String::from("vms"); // "s1" comes into scope
 
-    println!("s is {}", s);
+    let r1 = &s1; // "r1" `borrow` "s1"
+
+    let s2 = s1; // compile errorr
+    			 // "s1" can't `move` into "s2" because it is borrowed
+                 // by "r1"
 }
-
-fn get_string() -> String {
-	let s = String::from("hello"); // "s" comes into scope
-    
-    s // "s" `move` into calling function and is invalidated
-} // "s" goes out of scope and no drop required
