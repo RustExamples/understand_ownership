@@ -1,9 +1,11 @@
 fn main() {
-	let dangling_reference = get_dangling_reference(); // dangling reference
+	let s = get_string();
+
+    println!("s is {}", s);
 }
 
-fn get_dangling_reference() -> &String { // Returns reference to String
+fn get_string() -> String {
 	let s = String::from("hello"); // "s" comes into scope
     
-    &s // reference to "s" returned
-} // "s" goes out of scope and dropped
+    s // "s" `move` into calling function and is invalidated
+} // "s" goes out of scope and no drop required
